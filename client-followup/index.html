@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a7ea4" />
+  <title>Follow-up Tracker</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Follow-ups" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-row">
+      <h1>Follow-ups</h1>
+      <div class="status-pill" id="statusPill">0 due</div>
+    </div>
+    <p class="subtitle">Log a client right after you send a message. We'll remind you via Google Calendar.</p>
+    <div class="tabs">
+      <button class="tab active" data-tab="pending">Pending</button>
+      <button class="tab" data-tab="done">Done</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Add form -->
+    <section class="card add-card">
+      <h2>Log a follow-up</h2>
+      <form id="addForm">
+        <label>
+          Client
+          <input type="text" id="client" placeholder="Name or number" required autocomplete="off" />
+        </label>
+        <label>
+          Note (optional)
+          <textarea id="note" rows="2" placeholder="What to follow up about..."></textarea>
+        </label>
+        <div class="delay-row">
+          <span class="delay-label">Remind me in</span>
+          <div class="chips" id="delayChips">
+            <button type="button" class="chip" data-days="1">1 day</button>
+            <button type="button" class="chip" data-days="2">2 days</button>
+            <button type="button" class="chip active" data-days="3">3 days</button>
+            <button type="button" class="chip" data-days="7">1 week</button>
+            <button type="button" class="chip" data-days="14">2 weeks</button>
+            <button type="button" class="chip" data-days="30">1 month</button>
+          </div>
+          <div class="custom-delay">
+            <input type="number" id="customDays" min="1" max="365" placeholder="Custom days" />
+            <button type="button" id="useCustom" class="btn small">Use</button>
+          </div>
+        </div>
+        <button type="submit" class="btn primary">Log + schedule reminder</button>
+      </form>
+    </section>
+
+    <!-- Pending list -->
+    <section class="list-section" id="pendingSection">
+      <ul class="list" id="pendingList"></ul>
+      <div class="empty" id="pendingEmpty">No pending follow-ups. Log one above.</div>
+    </section>
+
+    <!-- Done list -->
+    <section class="list-section hidden" id="doneSection">
+      <ul class="list" id="doneList"></ul>
+      <div class="empty" id="doneEmpty">Nothing completed yet.</div>
+      <button class="btn small danger" id="clearDone">Clear completed</button>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Stored on this device only. Reminders fire through your Google Calendar.</p>
+    <button class="btn small ghost" id="exportBtn">Export (CSV)</button>
+  </footer>
+
+  <!-- Edit modal -->
+  <div class="modal-backdrop hidden" id="editBackdrop">
+    <div class="modal">
+      <h3>Edit follow-up</h3>
+      <form id="editForm">
+        <input type="hidden" id="editId" />
+        <label>
+          Client
+          <input type="text" id="editClient" required />
+        </label>
+        <label>
+          Note
+          <textarea id="editNote" rows="2"></textarea>
+        </label>
+        <label>
+          Due in (days)
+          <input type="number" id="editDays" min="1" max="365" required />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn small ghost" id="cancelEdit">Cancel</button>
+          <button type="submit" class="btn small primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
